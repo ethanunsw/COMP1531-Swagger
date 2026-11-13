@@ -13,7 +13,7 @@ paths:
     post:
       tags: [Study Reminders]
       summary: Create a new study reminder
-      description: Create a new study reminder with a name, description and due date for an individual user. Study reminders are automatically deleted the day after their due date.
+      description: Create a new study reminder with a name, description and due date for an individual user.
       parameters:
         - in: header
           name: token
@@ -80,7 +80,7 @@ paths:
     get:
       tags: [Study Reminders]
       summary: List all study reminders
-      description: List all study reminders. Users can see only their own reminders, site administrators can see all reminders.
+      description: List all study reminders. Reminders are listed such that the most overdue are listed first, then the closest due dates. Users can see only their own reminders, site administrators can see all reminders.
       parameters:
         - in: header
           name: token
@@ -462,7 +462,7 @@ paths:
     post:
       tags: [Courses]
       summary: Create a new study reminder for a course
-      description: Create a new study reminder for a course which is accessible for all students in a course. Course study reminders are also automatically deleted the day after their due date. User must be a staff member of the course or a site administrator. 
+      description: Create a new study reminder for a course which is accessible for all students in a course. User must be a staff member of the course or a site administrator. 
       parameters:
         - in: header
           name: token
@@ -546,7 +546,7 @@ paths:
     get:
       tags: [Courses]
       summary: List all study reminders in a course
-      description: List all study reminders in a course by course ID. User must be a member of the course (staff or student) or a site administrator to view. 
+      description: List all study reminders in a course by course ID. Reminders are listed such that the most overdue are listed first, then the closest due dates. User must be a member of the course (staff or student) or a site administrator to view. 
       parameters:
         - in: header
           name: token
