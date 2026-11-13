@@ -240,7 +240,6 @@ paths:
             application/json:
               schema:
                 type: object
-                properties:
         '400':
           description: >
             Name and description must be strings between 4 and 100 characters in length.<br>
