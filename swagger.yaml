@@ -1,0 +1,1071 @@
+openapi: 3.0.3
+info:
+  title: Yanki V2
+  version: '1.0'
+  description: 'New routes for the added study reminder requirements. '
+tags:
+  - name: Study Reminders
+  - name: Courses
+servers:
+  - url: https://yanki.app
+paths:
+  /v2/studyReminders:
+    post:
+      tags: [Study Reminders]
+      summary: Create a new study reminder
+      description: Create a new study reminder with a name, description and due date for an individual user.
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - date
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                date:
+                  type: string
+            example:
+              name: "string"
+              description: "string"
+              date: "01/01/2027"
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  studyReminderId:
+                    type: integer
+              example:
+                studyReminderId: 1
+        '400':
+          description: >
+            Name and description must be strings between 4 and 100 characters in length.<br>
+            Date cannot be in the past and must be of the form DD/MM/YYYY.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '401':
+          description: User is unauthenticated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+    get:
+      tags: [Study Reminders]
+      summary: List all study reminders
+      description: List all study reminders. Users can see only their own reminders, site administrators can see all reminders.
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  studyReminders:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        studyReminderId:
+                          type: integer
+                        name:
+                          type: string
+              example:
+                studyReminders:
+                  - studyReminderId: 1
+                    name: "string"
+        '401':
+          description: User is unauthenticated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+  /v2/studyReminders/{studyReminderId}:
+    get:
+      tags: [Study Reminders]
+      summary: View a study reminder
+      description: View a study reminder by ID. Users must own the study reminder to view it or the user must be a site administrator.
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: studyReminderId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  studyReminderId:
+                    type: integer
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  date:
+                    type: string
+                  decks:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        deckId:
+                          type: integer
+              example:
+                studyReminderId: 1
+                name: "string"
+                description: "string"
+                date: "01/01/2027"
+                decks: [{ "deckId": 1}]
+        '400':
+          description: The study reminder does not exist.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '401':
+          description: User is unauthenticated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '403':
+          description: The requested study reminder exists, but the user does not own it or is not a site administrator. 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+    put:
+      tags: [Study Reminders]
+      summary: Edit a study reminder
+      description: Edit a study reminder by ID. Users must own the study reminder to edit it or the user must be a site administrator.
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: studyReminderId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - date
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                date:
+                  type: string
+            example:
+              name: "string"
+              description: "string"
+              date: "01/01/2027"
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+        '400':
+          description: >
+            Name and description must be strings between 4 and 100 characters in length.<br>
+            Date cannot be in the past and must be of the form DD/MM/YYYY.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '401':
+          description: User is unauthenticated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '403':
+          description: The requested study reminder exists, but the user does not own it or is not a site administrator. 
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+    delete:
+      tags: [Study Reminders]
+      summary: Delete a study reminder
+      description: Delete a study reminder by ID. Users must own the study reminder to delete it or the user must be a site administrator.
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: studyReminderId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+              example: {}
+        '400':
+          description: The study reminder does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '401':
+          description: User is unauthenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '403':
+          description: The requested study reminder exists, but the user does not own it or is not a site administrator.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+  /v2/studyReminders/{studyReminderId}/deck/{deckId}:
+    post:
+      tags: [Study Reminders]
+      summary: Add a deck to a study reminder
+      description: Add a deck to a study reminder by ID. Decks are appended onto the current list of decks for that reminder. Users may add decks they own to their study reminders, or add decks that belong to courses they are a part of.
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: studyReminderId
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: deckId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+              example: {}
+        '400':
+          description: >
+            Study reminder does not exist or deck does not exist. <br>
+            Deck has already been added to the study reminder.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '401':
+          description: User is unauthenticated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '403':
+          description: User does not have permission to access the study reminder or the deck.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+    delete:
+      tags: [Study Reminders]
+      summary: Remove a deck from a study reminder
+      description: Remove a deck from a study reminder by ID. Removed decks that are reattached are reattached at the end. Users may remove any deck from their own study reminders.
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: studyReminderId
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: deckId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+              example: {}
+        '400':
+          description: >
+            Study reminder does not exist or deck does not exist. <br>
+            Deck does not belong to given study reminder.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '401':
+          description: User is unauthenticated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '403':
+          description: User does not have permission to access the study reminder.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+  /v2/courses/{courseId}/studyReminders:
+    post:
+      tags: [Courses]
+      summary: Create a new study reminder for a course
+      description: Create a new study reminder for a course which is accessible for all students in a course. User must be a staff member of the course or a site administrator. 
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: courseId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - date
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                date:
+                  type: string
+            example:
+              name: "string"
+              description: "string"
+              date: "01/01/2027"
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  courseStudyReminderId:
+                    type: integer
+              example:
+                courseStudyReminderId: 1
+        '400':
+          description: >
+            Course ID given does not exist. <br>
+            Name and description must be strings between 4 and 100 characters in length.<br>
+            Date cannot be in the past and must be of the form DD/MM/YYYY.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '401':
+          description: User is unauthenticated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '403':
+          description: User must be a site administrator or a staff member of the given course.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+    get:
+      tags: [Courses]
+      summary: List all study reminders in a course
+      description: List all study reminders in a course by course ID. User must be a member of the course (staff or student) or a site administrator to view. 
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: courseId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  courseId:
+                    type: number
+                  courseName:
+                    type: string
+                  studyReminders:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        courseStudyReminderId:
+                          type: integer
+                        name:
+                          type: string
+              example:
+                courseId: 1
+                courseName: "course"
+                studyReminders:
+                  - courseStudyReminderId: 1
+                    name: "string"
+        '401':
+          description: User is unauthenticated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '403':
+          description: User must be a site administrator or a member (staff or student) of the given course.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+  /v2/courses/studyReminders/{courseStudyReminderId}/students:
+    get:
+      tags: [Courses]
+      summary: List of students who have studied after the given reminder
+      description: List of students who have studied after the given reminder. User must be a staff admin or site administrator to view.
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: courseStudyReminderId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  courseStudyReminderId:
+                    type: integer
+                  name:
+                    type: string
+                  haveStudied:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        studentId:
+                          type: string
+                  haveNotStudied:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        studentId:
+                          type: string
+              example:
+                courseStudyReminderId: 1
+                name: "string"
+                haveStudied:
+                  - studentId: "string"
+                haveNotStudied:
+                  - studentId: "string"
+        '400':
+          description: Course does not exist or course study reminder does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '401':
+          description: User is unauthenticated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '403':
+          description: User must be a staff member of the course or a site administrator
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+  /v2/courses/{courseId}/studyReminders/{courseStudyReminderId}:
+    get:
+      tags: [Courses]
+      summary: View a course study reminder by ID
+      description: View details of a specific study reminder within a course. User must be a member of the course (staff or student) or a site administrator to view.
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: courseId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: courseStudyReminderId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  courseStudyReminderId:
+                    type: integer
+                  name:
+                    type: string
+                  description:
+                    type: string
+                  date:
+                    type: string
+                  courseId: 
+                    type: string
+                  courseName:
+                    type: string
+                  decks:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        deckId:
+                          type: integer
+              example:
+                courseStudyReminderId: 1
+                name: "string"
+                description: "string"
+                date: "01/01/2027"
+                courseId: "string"
+                courseName: "course"
+                decks:
+                  - deckId: 1
+        '400':
+          description: The course or course study reminder does not exist.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '401':
+          description: User is unauthenticated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '403':
+          description: User must be a site administrator or a member (student or staff) of the given course.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+    put:
+      tags: [Courses]
+      summary: Edit a course study reminder
+      description: Edit a course study reminder by ID. User must be a staff member or a site administrator to edit.
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: courseId
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: courseStudyReminderId
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - description
+                - date
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                date:
+                  type: string
+            example:
+              name: "string"
+              description: "string"
+              date: "01/01/2027"
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+              example: {}
+        '400':
+          description: >
+            Course or course study reminder does not exist. <br>
+            Name and description must be strings between 4 and 100 characters in length.<br>
+            Date cannot be in the past and must be of the form DD/MM/YYYY.<br>
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '401':
+          description: User is unauthenticated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '403':
+          description: User must be a site administrator or a staff member of the given course.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+    delete:
+        tags: [Courses]
+        summary: Delete a course study reminder
+        description: Delete a specific study reminder from a course. User must be a site administrator or a staff member of the given course.
+        parameters:
+          - in: header
+            name: token
+            required: true
+            schema:
+              type: string
+          - in: path
+            name: courseId
+            required: true
+            schema:
+              type: integer
+          - in: path
+            name: courseStudyReminderId
+            required: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: Successful response
+            content:
+              application/json:
+                schema:
+                  type: object
+                example: {}
+          '400':
+            description: Course or course study reminder does not exist. 
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                example:
+                  error: "string"
+          '401':
+            description: User is unauthenticated.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                example:
+                  error: "string"
+          '403':
+            description: User must be a site administrator or a staff member of the given course.
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    error:
+                      type: string
+                example:
+                  error: "string"
+  /v2/courses/{courseId}/studyReminders/{courseStudyReminderId}/deck/{deckId}:
+    post:
+      tags: [Courses]
+      summary: Add a deck to a course study reminder
+      description: Attach an existing course deck to a course study reminder. Decks are appended onto the current list of decks for that reminder. User must be a site administrator or a staff member of the given course.
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: courseId
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: courseStudyReminderId
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: deckId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response.
+          content:
+            application/json:
+              schema:
+                type: object
+              example: {}
+        '400':
+          description: >
+            Course or course study reminder does not exist. <br>
+            Deck does not exist or has not been added to the given course.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '401':
+          description: User is unauthenticated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '403':
+          description: User must be a site administrator or a staff member of the given course.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+    delete:
+      tags: [Courses]
+      summary: Remove a deck from a course study reminder
+      description: Remove a deck from the given course study reminder by ID. Removed then reattached decks are appended at the end. 
+      parameters:
+        - in: header
+          name: token
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: courseId
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: courseStudyReminderId
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: deckId
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+              example: {}
+        '400':
+          description: >
+            Course or course study reminder does not exist. <br>
+            Deck has not been added to the given study reminder.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '401':
+          description: User is unauthenticated.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+        '403':
+          description: User must be a site administrator or a staff member of the given course.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "string"
+components:
+  schemas: {}
+  headers: {}
+  responses: {}
+  parameters: {}
+
